@@ -63,8 +63,8 @@ To configure the plugin, go to WooCommerce > Settings from the left hand menu, t
 
 You can select the radio button next to ItexPay from the list of payment gateways available to make it the default gateway.
 
--	Go Live – check the box to enable Live environment default is Stage.
--	Api Key – enter your Api Key here. You will get this on your ItexPay merchant account.
+-	Go Live – check the box to enable Live environment.
+-	Api Key – enter your Api Key here. You will get this on your ItexPay merchant dashboard.
 -	Click on Save Changes for the changes you made to be effected.
 
 ## Frequently Asked Questions
