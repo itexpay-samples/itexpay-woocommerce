@@ -8,7 +8,10 @@ To get started with ITEXPay, visit <a href="https://itexpay.com" title="Click he
 
 With ITEXPay Woocommerce plugin, you can accept payments via the following payment options:
 
--	MasterCard/Visa
+-	MasterCard
+-	VISA
+-	Verve
+-	Afrigo
 -	NQR Code
 -	Bank Transfer
 -	E-Naira
