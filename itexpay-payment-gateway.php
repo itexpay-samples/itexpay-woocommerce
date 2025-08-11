@@ -4,13 +4,13 @@
 Plugin Name:  ITEXPay  Payment Gateway
 Plugin URI: https://wordpress.org/plugins/itex-woocommerce-payment-gateway/
 Description: ITEXPay Gateway for WooCommerce
-Version: 1.0
+Version: 1.1
 Author: ITEXPay
 Author URI: https://itexpay.com
 Requires at least: 3.0
-Tested up to: 6.1
+Tested up to: 10.0.4
 WC requires at least: 3.0
-WC tested up to: 6.1
+WC tested up to: 10.0.4
 */
 
 if (!defined('ABSPATH')) {
