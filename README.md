@@ -1,6 +1,7 @@
 ITEXPay Plugin for Woocommerce allows you to accept local and International payments on your Woocommerce store.
 
-
+**Version: 1.1**
+**Tested up to WooCommerce 10.0.4**
 
 To get started with ITEXPay, visit <a href="https://itexpay.com" title="Click here to apply to become a merchant on ItexPay" target="_blank"> ItexPay</a>
 

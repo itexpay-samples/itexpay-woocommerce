@@ -4,13 +4,13 @@
 Plugin Name:  ITEXPay  Payment Gateway
 Plugin URI: https://wordpress.org/plugins/itex-woocommerce-payment-gateway/
 Description: ITEXPay Gateway for WooCommerce
-Version: 1.0
+Version: 1.1
 Author: ITEXPay
 Author URI: https://itexpay.com
 Requires at least: 3.0
-Tested up to: 6.1
+Tested up to: 10.0.4
 WC requires at least: 3.0
-WC tested up to: 6.1
+WC tested up to: 10.0.4
 */
 
 if (!defined('ABSPATH')) {
@@ -43,7 +43,7 @@ function itex_woocommerce_init() {
      *
      * @var bool
      */
-        public static $log_enabled = false;
+        public static $log_enabled = true;
 
     /**
      * Logger instance
@@ -163,7 +163,7 @@ function send_request_to_api($order_id) {
     $apikey = $this->apikey; 
 
     //Order...
-    $order = new WC_Order($order_id);
+    $order = wc_get_order($order_id);
     $amount = $order->get_total();
     $currency = $order->get_currency();
 
@@ -224,7 +224,6 @@ $postdata = array(
     'redirection' => '5',
     'httpversion' => '1.0',
     'blocking' => true,
-    'sslverify' => false,
     'headers' => array( 
         'Content-Type' => 'application/json',
         'cache-control' => 'no-cache',
@@ -371,7 +370,7 @@ else
         //Processing payment...
   function process_payment($order_id) {
     WC()->session->set('wc_itex_order_id', $order_id);
-    $order = new WC_Order($order_id);
+    $order = wc_get_order($order_id);
 
     return array(
         'result' => 'success',
@@ -387,7 +386,7 @@ function showMessage($content) {
 
 
 function get_pages($title = false, $indent = true) {
-    $wp_pages = get_pages('sort_column=menu_order');
+    $wp_pages = get_posts('sort_column=menu_order');
     $page_list = array();
     if ($title)
         $page_list[] = $title;
@@ -398,7 +397,7 @@ function get_pages($title = false, $indent = true) {
             $has_parent = $page->post_parent;
             while ($has_parent) {
                 $prefix .= ' - ';
-                $next_page = get_page($has_parent);
+                $next_page = get_post($has_parent);
                 $has_parent = $next_page->post_parent;
             }
         }
@@ -557,7 +556,6 @@ if ($this->settings['go_live'] == "yes") {
        $response = wp_remote_get( $status_check_base_url ,
          array( 'timeout' => 60, 'redirection' => '5', 
             'httpversion' => '1.0', 'blocking' => true,
-            'sslverify' => false,
             'headers' => array( 'Authorization' => 'Bearer '.$this->apikey.'') ));
 
 //Checking no error..
@@ -575,6 +573,7 @@ if ($this->settings['go_live'] == "yes") {
 
     //Getting response body...
         $reponse_body = wp_remote_retrieve_body( $response );
+        $this->log( 'ItexPay API Response: ' . $reponse_body, 'info' );
         $response_data = json_decode( $reponse_body, true );
 
     }
@@ -611,8 +610,8 @@ if($transaction_message == "approved" || $transaction_message == "Approved" && $
 
  $message_type = "success";
 
- $order->payment_complete();
- $order->update_status('completed');
+ $order->payment_complete($wc_transaction_id);
+ $order->update_status('processing');
  $order->add_order_note('ItexPay Responses : <br /> 
      Code : '.$transaction_code.'<br/>
      Status : '.$transaction_message.'<br/>
@@ -638,7 +637,7 @@ exit();
         the transaction has been declined.";
         $message_type = "error";
 
-        $order->payment_complete();
+        $order->payment_complete($wc_transaction_id);
         $order->update_status('failed');
        $order->add_order_note('ItexPay Responses : <br /> 
      Code : '.$transaction_code.'<br/>
